@@ -21,8 +21,8 @@ An online multiplayer deception game inspired by *The Traitors* reality TV show.
 - All players participate in **team challenges**
 - During the challenges, players can label other players with badges, such as "liar, reliable, bold, smart, ..."
 - Completing challenges earns **XP points** for the group pot
-- Players discuss and **vote to banish** one suspected traitor
-- - Discussion method to be define, audio would enhance deceiving element of the game.
+- Players discuss and **vote to banish** one suspected traitor- 
+- - Discussion method to be defined, audio would enhance deceiving element of the game.
 - If a Traitor is banished → XP stays in the pot
 - If a Faithful is banished → Less people to share the prize
 
