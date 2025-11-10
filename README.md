@@ -57,16 +57,19 @@ An online multiplayer deception game inspired by *The Traitors* reality TV show.
 ## 🛠️ Technical Stack (What We'll Build)
 
 ### **Frontend**
-- HTML5, CSS, JavaScript (or React, not sure yet lol)
+- HTML5, CSS3, Vanilla JavaScript
 - Real-time UI updates
 - Interactive voting system
 - Challenge mini-games
+- WebSocket client for real-time communication
 
 ### **Backend**
-- Java (Spring Boot) or Node.js
+- Java (Spring Boot)
 - WebSocket connections for real-time gameplay
-- User authentication & profiles
-- Matchmaking system
+- Spring Security for authentication & profiles
+- RESTful APIs for game management
+- PostgreSQL or MySQL database
+- Maven/Gradle for dependency management
 
 ### **Features to Implement**
 - User accounts & login system
@@ -127,21 +130,21 @@ An online multiplayer deception game inspired by *The Traitors* reality TV show.
 
 ## 💡 Why This is Perfect for Fullstack Practice
 
-✅ Real-time communication (WebSockets)
+✅ Real-time communication (WebSockets with STOMP protocol)
 
 ✅ Complex game state management
 
-✅ User authentication & sessions
+✅ Spring Security authentication & JWT sessions
 
-✅ Database design (users, matches, stats)
+✅ JPA/Hibernate database design (users, matches, stats)
 
-✅ Frontend interactivity & animations
+✅ Vanilla JavaScript DOM manipulation & animations
 
-✅ Backend API development
+✅ RESTful API development with Spring Boot
 
-✅ Multiplayer synchronization
+✅ Multiplayer synchronization with WebSocket
 
-✅ Security (preventing cheating)
+✅ Security (preventing cheating, input validation)
 
 ---
 

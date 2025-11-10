@@ -248,13 +248,13 @@ Definition of Done:
 
 **Tasks:**
 - [ ] Set up GitHub repository
-- [ ] Initialize backend (Express + TypeScript + PostgreSQL)
-- [ ] Initialize frontend (React + TypeScript + Vite)
-- [ ] Connect frontend to backend (test API call)
+- [ ] Initialize backend (Spring Boot + Maven/Gradle + PostgreSQL)
+- [ ] Initialize frontend (HTML/CSS/Vanilla JavaScript folder structure)
+- [ ] Connect frontend to backend (test REST API call with fetch)
 - [ ] Set up CI/CD basics (optional)
-- [ ] Define shared TypeScript types
+- [ ] Define shared DTOs in backend
 
-**Definition of Done:** All 3 devs can run project locally and see "Hello World"
+**Definition of Done:** All 3 devs can run project locally and see "Hello World" response from API
 
 ---
 
@@ -267,9 +267,9 @@ Definition of Done:
 - View profile
 
 **Tasks:**
-- Backend: User model, auth endpoints, JWT
-- Frontend: Login page, register page, protected routes
-- Integration: Auth context, token storage
+- Backend: User entity (JPA), auth REST controllers, JWT with Spring Security
+- Frontend: login.html, register.html, profile.html, auth.js utility
+- Integration: JWT storage in localStorage, API request interceptor
 
 **Demo:** Create account → Login → See profile page
 
@@ -285,9 +285,9 @@ Definition of Done:
 - Basic lobby chat
 
 **Tasks:**
-- Backend: Room management, WebSocket setup
-- Frontend: Lobby browser, room creation, waiting room
-- Integration: Real-time player updates
+- Backend: Room entity, RoomService, STOMP WebSocket configuration
+- Frontend: lobby.html, roomList.js, waitingRoom.js, websocket.js utility
+- Integration: Real-time player updates via STOMP subscriptions
 
 **Demo:** 3 people join same room and see each other
 
@@ -303,9 +303,9 @@ Definition of Done:
 - Basic voting
 
 **Tasks:**
-- Backend: Game state machine, phase transitions, voting logic
-- Frontend: Game screen, phase UI, basic voting interface
-- Integration: WebSocket game events
+- Backend: GameService state machine, @Scheduled phase transitions, VoteService
+- Frontend: game.html, gameState.js, phaseManager.js, votingUI.js
+- Integration: STOMP WebSocket game event subscriptions (/topic/game/{id})
 
 **Demo:** 5 people play a full round (Day → Night → Vote → Next Day)
 
@@ -319,9 +319,9 @@ Definition of Done:
 - Earn XP for pot
 
 **Tasks:**
-- Backend: Challenge system, XP calculation
-- Frontend: Challenge UI, one mini-game
-- Integration: Challenge results submission
+- Backend: ChallengeService, XP calculation with BigDecimal, Challenge entity
+- Frontend: challengeManager.js, miniGames.js (canvas-based game), CSS animations
+- Integration: POST /api/challenges/{id}/submit results
 
 **Demo:** Complete a challenge and watch XP increase
 
@@ -336,9 +336,9 @@ Definition of Done:
 - Vote results with animation
 
 **Tasks:**
-- Backend: Pre-vote tracking, hot seat system
-- Frontend: Voting UI polish, hot seat interface
-- Integration: Real-time hot seat coordination
+- Backend: Pre-vote tracking in VoteService, HotSeatService with @Scheduled
+- Frontend: Enhanced votingUI.js, hot seat modal/interface with CSS animations
+- Integration: Real-time hot seat coordination via WebSocket
 
 **Demo:** Experience hot seat → vote with pressure
 
@@ -353,9 +353,9 @@ Definition of Done:
 - See labels on profiles
 
 **Tasks:**
-- Backend: Label system API, WebRTC signaling
-- Frontend: Voice controls, label UI
-- Integration: Voice connections, label display
+- Backend: Label entity + REST API, WebRTC signaling via WebSocket
+- Frontend: voiceChat.js with WebRTC API, label modal UI, badge display
+- Integration: Voice peer connections, label display on player cards
 
 **Demo:** Talk with voice and label suspicious players
 
@@ -370,9 +370,9 @@ Definition of Done:
 - View match statistics
 
 **Tasks:**
-- Backend: Victory detection, XP distribution, stats tracking
-- Frontend: End game screen, stats display
-- Integration: Match history saved
+- Backend: Victory detection (@Component), XP distribution with @Transactional, Stats entity
+- Frontend: endGame.js, stats display modal/page, match history UI
+- Integration: Match history saved to database, retrieved via REST API
 
 **Demo:** Play full game to completion and see stats
 

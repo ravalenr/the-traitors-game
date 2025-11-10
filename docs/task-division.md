@@ -7,32 +7,33 @@
 **Focus:** User management, game rooms, and player profiles
 
 ### **Backend Tasks**
-- [ ] Set up Express server with TypeScript
-- [ ] Database schema design (Users, Games, Stats tables)
-- [ ] User authentication system (register, login, JWT tokens)
-- [ ] User profile API endpoints (GET/UPDATE profile, stats)
-- [ ] Lobby/Room system API
-    - Create room endpoint
-    - Join room endpoint
-    - Leave room endpoint
-    - List available rooms
-    - Room capacity management
-- [ ] WebSocket setup for lobby (players joining/leaving)
-- [ ] Game initialization logic (assign roles randomly)
+- [ ] Set up Spring Boot project with Maven/Gradle
+- [ ] Database schema design (Users, Games, Stats entities with JPA)
+- [ ] User authentication system (register, login with Spring Security & JWT)
+- [ ] User profile REST endpoints (GET/UPDATE profile, stats)
+- [ ] Lobby/Room system REST API
+    - POST /api/rooms - Create room endpoint
+    - POST /api/rooms/{id}/join - Join room endpoint
+    - POST /api/rooms/{id}/leave - Leave room endpoint
+    - GET /api/rooms - List available rooms
+    - Room capacity management service
+- [ ] WebSocket/STOMP setup for lobby (players joining/leaving)
+- [ ] Game initialization logic (assign roles randomly with @Service)
 
 ### **Frontend Tasks**
-- [ ] Login/Register pages
+- [ ] Login/Register pages (HTML/CSS/JS with fetch API)
 - [ ] User profile page (view stats, labels earned)
-- [ ] Lobby browser (list of available games)
-- [ ] Room creation interface
+- [ ] Lobby browser (list of available games with dynamic rendering)
+- [ ] Room creation interface (form with validation)
 - [ ] Waiting room UI (players list, ready status, chat)
-- [ ] Player card components (avatar, username, stats)
-- [ ] Connection status indicators
+- [ ] Player card components (reusable HTML templates)
+- [ ] WebSocket connection status indicators
+- [ ] JWT token storage in localStorage/sessionStorage
 
 ### **Integration Points**
-- Share User type definitions with Person 2 & 3
-- Provide WebSocket connection setup for Person 2
-- Room state management hooks for Person 3
+- Share User entity/DTO definitions with Person 2 & 3
+- Provide WebSocket/STOMP connection setup for Person 2
+- Room state management utilities for Person 3
 
 ---
 
@@ -40,56 +41,56 @@
 **Focus:** Core game mechanics, state management, and day/night cycles
 
 ### **Backend Tasks**
-- [ ] Game state management system
-    - Current phase tracker (Day/Night/Voting/Results)
-    - Player alive/dead status
-    - XP pot tracking
+- [ ] Game state management system (@Service layer)
+    - Current phase tracker enum (Day/Night/Voting/Results)
+    - Player alive/dead status in Game entity
+    - XP pot tracking with BigDecimal
     - Round counter
-- [ ] Day phase logic
-    - Challenge start/end triggers
-    - Discussion timer
+- [ ] Day phase logic (@Service methods)
+    - Challenge start/end triggers with @Scheduled
+    - Discussion timer with CompletableFuture
     - Hot seat rotation system
 - [ ] Night phase logic
-    - Traitor murder selection
-    - Murder resolution
-    - Victim reveal at dawn
-- [ ] Voting system backend
-    - Vote collection
-    - Vote tallying
+    - Traitor murder selection with validation
+    - Murder resolution service
+    - Victim reveal at dawn via WebSocket broadcast
+- [ ] Voting system backend (@RestController + @Service)
+    - POST /api/games/{id}/votes - Vote collection
+    - Vote tallying algorithm
     - Banishment logic
     - Pre-vote declaration tracking
-- [ ] Victory condition checker
-    - Detect 3 players remaining
-    - Calculate winners
-    - XP distribution
-- [ ] Label system API (liar, clever, smart, cheeky, bold)
-    - Award labels endpoint
-    - Track label history
-- [ ] WebSocket events for game state updates
+- [ ] Victory condition checker (@Component)
+    - Detect 3 players remaining trigger
+    - Calculate winners algorithm
+    - XP distribution with JPA transactions
+- [ ] Label system REST API (liar, clever, smart, cheeky, bold)
+    - POST /api/labels - Award labels endpoint
+    - GET /api/users/{id}/labels - Track label history
+- [ ] STOMP WebSocket events for game state updates
 
 ### **Frontend Tasks**
-- [ ] Game screen main layout
-- [ ] Phase indicator UI (Day/Night banner, timer)
+- [ ] Game screen main layout (HTML/CSS grid or flexbox)
+- [ ] Phase indicator UI (Day/Night banner, timer with setInterval)
 - [ ] Day phase interface
-    - Discussion area
-    - Player grid with status
-    - Phase timer display
+    - Discussion area (chat-like display)
+    - Player grid with status (dynamic DOM creation)
+    - Phase timer display with countdown
 - [ ] Night phase interface
     - Traitor-only murder selection screen
-    - Faithful waiting screen
-    - Murder reveal animation
-- [ ] Game state context/provider (React Context or Zustand)
+    - Faithful waiting screen (conditional rendering)
+    - Murder reveal animation (CSS transitions)
+- [ ] Game state management (vanilla JS object/class pattern)
 - [ ] End game screen
-    - Winner announcement
+    - Winner announcement modal
     - XP distribution display
-    - Match statistics
-- [ ] Player role indicator (secret - only you see it)
-- [ ] Game flow animations and transitions
+    - Match statistics table
+- [ ] Player role indicator (secret - only you see it, stored in memory)
+- [ ] Game flow animations and transitions (CSS + JS)
 
 ### **Integration Points**
-- Receive room data from Person 1
+- Receive room data from Person 1 via REST/WebSocket
 - Provide game state to Person 3 for challenges/voting
-- Share phase hooks with Person 3
+- Share phase management utilities with Person 3
 
 ---
 
@@ -97,71 +98,72 @@
 **Focus:** Interactive features, voting UI, voice chat, and hot seat
 
 ### **Backend Tasks**
-- [ ] Challenge system API
-    - Multiple challenge types (reflex, puzzle, teamwork)
-    - Challenge result submission
-    - XP calculation for completed challenges
-    - Challenge progress tracking
+- [ ] Challenge system REST API
+    - POST /api/challenges - Multiple challenge types (reflex, puzzle, teamwork)
+    - POST /api/challenges/{id}/submit - Challenge result submission
+    - XP calculation service for completed challenges
+    - Challenge progress tracking with JPA
 - [ ] Voting system API support
-    - Pre-vote declaration endpoints
-    - Final vote submission
-    - Tie-breaker logic
-- [ ] Chat system (WebSocket)
-    - General day chat
-    - Traitor-only night chat
-    - Message broadcasting
-    - Chat history
+    - POST /api/votes/declare - Pre-vote declaration endpoints
+    - POST /api/votes/submit - Final vote submission
+    - Tie-breaker logic in @Service
+- [ ] Chat system (STOMP WebSocket)
+    - /topic/chat/day - General day chat broadcast
+    - /topic/chat/traitors - Traitor-only night chat
+    - Message broadcasting with @MessageMapping
+    - Chat history with JPA entities
 - [ ] Hot seat mechanic backend
-    - Player selection rotation
-    - Question submission tracking
-    - Timer enforcement
-- [ ] Voice chat coordination (signal server for WebRTC)
+    - Player selection rotation algorithm
+    - POST /api/hotseat/questions - Question submission tracking
+    - Timer enforcement with @Scheduled tasks
+- [ ] Voice chat coordination (WebRTC signaling server with WebSocket)
 
 ### **Frontend Tasks**
-- [ ] Challenge UI components
+- [ ] Challenge UI components (HTML/CSS/JS)
     - Challenge instructions screen
-    - Interactive challenge games (mini-games)
-    - Progress bars
+    - Interactive challenge games (canvas-based mini-games)
+    - Progress bars (CSS animations)
     - Team coordination display
     - XP earned animation
 - [ ] Voting interface
-    - Pre-vote declaration screen
-    - Final voting screen
-    - Vote counter display
-    - Results reveal animation
-- [ ] Chat system
-    - Chat box component
-    - Message list
-    - Real-time message updates
-    - Traitor-only chat toggle
-- [ ] Voice chat integration
-    - Microphone controls (mute/unmute)
-    - Voice indicators (who's speaking)
+    - Pre-vote declaration screen (form with fetch)
+    - Final voting screen (radio buttons + submit)
+    - Vote counter display (dynamic updates)
+    - Results reveal animation (CSS transitions)
+- [ ] Chat system (vanilla JS + WebSocket)
+    - Chat box component (scrollable div)
+    - Message list (dynamically appended DOM)
+    - Real-time message updates via STOMP.js
+    - Traitor-only chat toggle (conditional display)
+- [ ] Voice chat integration (WebRTC API)
+    - Microphone controls (mute/unmute buttons)
+    - Voice indicators (visual feedback on speaking)
     - Audio quality settings
 - [ ] Hot seat interface
-    - Hot seat spotlight UI
-    - Question submission box
-    - Timer countdown
-    - Q&A display
+    - Hot seat spotlight UI (highlighted player)
+    - Question submission box (form input)
+    - Timer countdown (setInterval)
+    - Q&A display (list rendering)
 - [ ] Label awarding interface
-    - Label selection modal
-    - Label display on player cards
-    - Label history tooltip
+    - Label selection modal (custom modal with JS)
+    - Label display on player cards (badges)
+    - Label history tooltip (hover events)
 
 ### **Integration Points**
-- Use game state from Person 2
-- Use player data from Person 1
-- Coordinate WebSocket events with both
+- Use game state from Person 2 via REST API/WebSocket
+- Use player data from Person 1 via REST endpoints
+- Coordinate STOMP WebSocket subscriptions with both
 
 ---
 
 ## 🤝 Shared Responsibilities
 
 ### **Everyone**
-- [ ] TypeScript type definitions (shared types file)
-- [ ] Code reviews for each other
-- [ ] Testing their own features
-- [ ] Documentation for their components
+- [ ] Shared DTOs (Data Transfer Objects) for API contracts
+- [ ] Code reviews for each other (pull requests)
+- [ ] Testing their own features (JUnit for backend, manual testing for frontend)
+- [ ] JavaDoc for backend, JSDoc for frontend
+- [ ] API documentation (Swagger/OpenAPI)
 
 ### **Weekly Sync Points**
 - Integration testing together
@@ -174,57 +176,111 @@
 ## 📂 Project Structure
 
 ```
-traitors-game/
-├── backend/
+the-traitors-game/
+├── backend/                                    (Spring Boot Application)
 │   ├── src/
-│   │   ├── controllers/
-│   │   │   ├── authController.ts        [Person 1]
-│   │   │   ├── gameController.ts        [Person 2]
-│   │   │   ├── challengeController.ts   [Person 3]
-│   │   │   └── voteController.ts        [Person 3]
-│   │   ├── models/
-│   │   │   ├── User.ts                  [Person 1]
-│   │   │   ├── Game.ts                  [Person 2]
-│   │   │   └── Challenge.ts             [Person 3]
-│   │   ├── services/
-│   │   │   ├── authService.ts           [Person 1]
-│   │   │   ├── gameService.ts           [Person 2]
-│   │   │   └── challengeService.ts      [Person 3]
-│   │   ├── socket/
-│   │   │   ├── lobbySocket.ts           [Person 1]
-│   │   │   ├── gameSocket.ts            [Person 2]
-│   │   │   └── chatSocket.ts            [Person 3]
-│   │   ├── types/
-│   │   │   └── shared.ts                [Everyone]
-│   │   └── server.ts                    [Person 1 sets up]
-│   └── package.json
+│   │   ├── main/
+│   │   │   ├── java/com/traitors/
+│   │   │   │   ├── TraitorsGameApplication.java
+│   │   │   │   ├── config/
+│   │   │   │   │   ├── SecurityConfig.java          [Person 1]
+│   │   │   │   │   └── WebSocketConfig.java         [Person 1]
+│   │   │   │   ├── controller/
+│   │   │   │   │   ├── AuthController.java          [Person 1]
+│   │   │   │   │   ├── UserController.java          [Person 1]
+│   │   │   │   │   ├── RoomController.java          [Person 1]
+│   │   │   │   │   ├── GameController.java          [Person 2]
+│   │   │   │   │   ├── VoteController.java          [Person 2]
+│   │   │   │   │   ├── ChallengeController.java     [Person 3]
+│   │   │   │   │   └── ChatController.java          [Person 3]
+│   │   │   │   ├── entity/
+│   │   │   │   │   ├── User.java                    [Person 1]
+│   │   │   │   │   ├── Room.java                    [Person 1]
+│   │   │   │   │   ├── Game.java                    [Person 2]
+│   │   │   │   │   ├── GamePlayer.java              [Person 2]
+│   │   │   │   │   ├── Vote.java                    [Person 2]
+│   │   │   │   │   ├── Challenge.java               [Person 3]
+│   │   │   │   │   ├── Label.java                   [Person 2]
+│   │   │   │   │   └── ChatMessage.java             [Person 3]
+│   │   │   │   ├── repository/
+│   │   │   │   │   ├── UserRepository.java          [Person 1]
+│   │   │   │   │   ├── RoomRepository.java          [Person 1]
+│   │   │   │   │   ├── GameRepository.java          [Person 2]
+│   │   │   │   │   ├── VoteRepository.java          [Person 2]
+│   │   │   │   │   ├── ChallengeRepository.java     [Person 3]
+│   │   │   │   │   └── ChatMessageRepository.java   [Person 3]
+│   │   │   │   ├── service/
+│   │   │   │   │   ├── AuthService.java             [Person 1]
+│   │   │   │   │   ├── RoomService.java             [Person 1]
+│   │   │   │   │   ├── GameService.java             [Person 2]
+│   │   │   │   │   ├── VoteService.java             [Person 2]
+│   │   │   │   │   ├── ChallengeService.java        [Person 3]
+│   │   │   │   │   └── ChatService.java             [Person 3]
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── LoginRequest.java            [Everyone]
+│   │   │   │   │   ├── AuthResponse.java            [Everyone]
+│   │   │   │   │   ├── RoomDTO.java                 [Everyone]
+│   │   │   │   │   ├── GameStateDTO.java            [Everyone]
+│   │   │   │   │   └── ...                          [Everyone]
+│   │   │   │   ├── security/
+│   │   │   │   │   ├── JwtTokenProvider.java        [Person 1]
+│   │   │   │   │   └── JwtAuthenticationFilter.java [Person 1]
+│   │   │   │   └── websocket/
+│   │   │   │       ├── GameWebSocketHandler.java    [Person 2]
+│   │   │   │       └── ChatWebSocketHandler.java    [Person 3]
+│   │   │   └── resources/
+│   │   │       ├── application.properties
+│   │   │       └── static/                          (Serve frontend files)
+│   │   └── test/                                    (JUnit tests)
+│   ├── pom.xml or build.gradle
+│   └── README.md
 │
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Auth/                    [Person 1]
-│   │   │   ├── Lobby/                   [Person 1]
-│   │   │   ├── Game/                    [Person 2]
-│   │   │   ├── Challenges/              [Person 3]
-│   │   │   ├── Voting/                  [Person 3]
-│   │   │   └── Chat/                    [Person 3]
-│   │   ├── contexts/
-│   │   │   ├── AuthContext.tsx          [Person 1]
-│   │   │   ├── GameContext.tsx          [Person 2]
-│   │   │   └── SocketContext.tsx        [Person 1]
-│   │   ├── hooks/
-│   │   │   ├── useAuth.ts               [Person 1]
-│   │   │   ├── useGame.ts               [Person 2]
-│   │   │   └── useVoiceChat.ts          [Person 3]
-│   │   ├── pages/
-│   │   │   ├── LoginPage.tsx            [Person 1]
-│   │   │   ├── LobbyPage.tsx            [Person 1]
-│   │   │   ├── GamePage.tsx             [Person 2]
-│   │   │   └── ProfilePage.tsx          [Person 1]
-│   │   ├── types/
-│   │   │   └── shared.ts                [Everyone]
-│   │   └── App.tsx                      [Person 1 sets up routing]
-│   └── package.json
+├── frontend/                                    (Vanilla HTML/CSS/JS)
+│   ├── index.html                               (Landing page)
+│   ├── pages/
+│   │   ├── login.html                           [Person 1]
+│   │   ├── register.html                        [Person 1]
+│   │   ├── profile.html                         [Person 1]
+│   │   ├── lobby.html                           [Person 1]
+│   │   └── game.html                            [Person 2]
+│   ├── css/
+│   │   ├── styles.css                           (Global styles)
+│   │   ├── auth.css                             [Person 1]
+│   │   ├── lobby.css                            [Person 1]
+│   │   ├── game.css                             [Person 2]
+│   │   ├── challenges.css                       [Person 3]
+│   │   └── chat.css                             [Person 3]
+│   ├── js/
+│   │   ├── utils/
+│   │   │   ├── api.js                           (Fetch wrapper) [Everyone]
+│   │   │   ├── websocket.js                     (STOMP setup) [Person 1]
+│   │   │   └── auth.js                          (JWT handling) [Person 1]
+│   │   ├── auth/
+│   │   │   ├── login.js                         [Person 1]
+│   │   │   └── register.js                      [Person 1]
+│   │   ├── lobby/
+│   │   │   ├── roomList.js                      [Person 1]
+│   │   │   └── waitingRoom.js                   [Person 1]
+│   │   ├── game/
+│   │   │   ├── gameState.js                     [Person 2]
+│   │   │   ├── phaseManager.js                  [Person 2]
+│   │   │   └── endGame.js                       [Person 2]
+│   │   ├── challenges/
+│   │   │   ├── challengeManager.js              [Person 3]
+│   │   │   └── miniGames.js                     [Person 3]
+│   │   ├── voting/
+│   │   │   └── votingUI.js                      [Person 3]
+│   │   └── chat/
+│   │       ├── chatManager.js                   [Person 3]
+│   │       └── voiceChat.js                     [Person 3]
+│   └── assets/
+│       ├── images/
+│       └── sounds/
+│
+├── docs/
+│   ├── scrum-framework.md
+│   ├── task-division.md
+│   └── API.md                                   (API documentation)
 │
 └── README.md
 ```
@@ -269,33 +325,59 @@ traitors-game/
 
 ---
 
-## 🔧 Suggested Libraries
+## 🔧 Suggested Dependencies & Libraries
 
-### **Backend**
-```json
-{
-  "express": "^4.18.0",
-  "socket.io": "^4.6.0",
-  "jsonwebtoken": "^9.0.0",
-  "bcrypt": "^5.1.0",
-  "pg": "^8.11.0",           // PostgreSQL
-  "typeorm": "^0.3.0",       // ORM (optional)
-  "cors": "^2.8.5",
-  "dotenv": "^16.0.0"
-}
+### **Backend (Maven/Gradle)**
+```xml
+<!-- Spring Boot Starters -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-websocket</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+<!-- Database -->
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+</dependency>
+
+<!-- JWT -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.1</version>
+</dependency>
+
+<!-- Testing -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
 ```
 
-### **Frontend**
-```json
-{
-  "react": "^18.2.0",
-  "react-router-dom": "^6.21.0",
-  "socket.io-client": "^4.6.0",
-  "axios": "^1.6.0",
-  "zustand": "^4.5.0",        // State management (optional)
-  "simple-peer": "^9.11.1",   // WebRTC for voice
-  "react-hot-toast": "^2.4.1" // Notifications
-}
+### **Frontend (Vanilla JS + CDN/npm)**
+```javascript
+// STOMP.js for WebSocket (via CDN)
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+
+// SockJS (fallback for WebSocket)
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+
+// Optional: Simple-peer for WebRTC voice chat
+<script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
 ```
 
 ---
@@ -333,31 +415,31 @@ traitors-game/
 ### **Initial Setup (Do Together)**
 - [ ] Create GitHub repository
 - [ ] Set up project structure (folders above)
-- [ ] Initialize backend (Express + TypeScript)
-- [ ] Initialize frontend (React + TypeScript + Vite)
-- [ ] Set up PostgreSQL database
-- [ ] Define shared types in `/types/shared.ts`
-- [ ] Set up development environment (.env files)
-- [ ] First successful connection (backend + frontend)
+- [ ] Initialize Spring Boot project (use Spring Initializr)
+- [ ] Create frontend folder structure (HTML/CSS/JS)
+- [ ] Set up PostgreSQL database (local instance)
+- [ ] Define shared DTOs in `/dto/` package
+- [ ] Configure application.properties (DB, JWT, WebSocket)
+- [ ] First successful connection (backend REST API + frontend fetch)
 
 ### **Person 1 First Tasks**
-- [ ] Express server running
-- [ ] Database connection working
-- [ ] Basic auth endpoints (register/login)
-- [ ] JWT token generation
-- [ ] Login page in React
+- [ ] Spring Boot server running on port 8080
+- [ ] Database connection working (test with H2 or PostgreSQL)
+- [ ] Basic auth REST endpoints (POST /api/auth/register, /api/auth/login)
+- [ ] JWT token generation with Spring Security
+- [ ] Login page in vanilla HTML/CSS/JS with fetch API
 
 ### **Person 2 First Tasks**
-- [ ] Game state TypeScript types
-- [ ] Basic game context provider
-- [ ] Phase transition logic (skeleton)
-- [ ] Game page layout
+- [ ] Game entity and DTOs defined
+- [ ] Basic game service methods (createGame, startGame)
+- [ ] Phase transition logic (skeleton in GameService)
+- [ ] game.html page layout with CSS
 
 ### **Person 3 First Tasks**
-- [ ] WebSocket chat implementation
-- [ ] Chat UI component
-- [ ] Basic voting interface
-- [ ] Vote submission working
+- [ ] WebSocket/STOMP chat implementation
+- [ ] Chat UI component (chatManager.js)
+- [ ] Basic voting interface (votingUI.js)
+- [ ] Vote submission working (POST /api/votes/submit)
 
 ---
 
